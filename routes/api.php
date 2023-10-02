@@ -24,7 +24,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy']);
+    //backend route---
     //---category
     route::post('/category/create', [CategoryController::class, 'store']);
     route::get('/category', [CategoryController::class, 'index']);
@@ -33,11 +35,19 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     route::delete('/category/delete/{id}', [CategoryController::class, 'delete']);
     //-blog post ---
     route::post('/post/create', [BlogPostController::class, 'store']);
+    route::get('/post/edit/{id}', [BlogPostController::class, 'edit']);
+    route::put('/post/update/{id}', [BlogPostController::class, 'update']);
+    route::delete('/post/delete', [BlogPostController::class, 'delete']);
+    //backend route end---
 });
 
 Route::post('register', [RegisteredUserController::class, 'store']);
 Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
-//----frontend controller ---
+//----frontend route ---
 Route::get('front/blog', [FrontendController::class, 'index']);
 Route::get('front/blog/{slug}', [FrontendController::class, 'single_blog']);
+Route::get('/front/related_blog/{slug}', [FrontendController::class, 'related_blog']);
+//--blog
+Route::get('/front/all-blogs', [FrontendController::class, 'all_blogs']);
+

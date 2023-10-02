@@ -10,7 +10,7 @@
 
     <h2 class="header-title">Latest Blog Posts</h2>
     <section class="cards-blog latest-blog">
-        <div class="card-blog-content" v-for="post in posts">
+        <div class="card-blog-content" v-for="post in posts" :key="post.id">
             <img :src="post.image" alt="" />
             <p>
                 {{ post.created_at }}

@@ -3,10 +3,10 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card mt-5">
-                    <!-- <div class="success-message" v-if="success">
+                    <div class="success-message" v-if="success">
                         <i class="fas fa-check"></i>
                         {{ success }}
-                    </div> -->
+                    </div>
                     <div class="card-header">
                         <router-link :to="{ name: 'PostCreate' }" class="btn btn-sm btn-primary"><i
                                 class="fas fa-plus-square"></i> Add New</router-link>
@@ -55,6 +55,7 @@
 export default {
     data(){
         return{
+            success:'',
             posts: [],
         }
     }, 

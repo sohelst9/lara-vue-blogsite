@@ -1,83 +1,68 @@
 <template>
-    <section class="single-blog-post">
-        <h1>Benefits of paul's photography</h1>
+  <section class="single-blog-post">
+    <h1>{{ post.title }}</h1>
 
-        <p class="time-and-author">
-          2 hours ago
-          <span>Written By Alphayo Wakarindi</span>
-        </p>
+    <p class="time-and-author">
+      {{ post.created_at }}
+      <span>Written By {{ post.user }}</span>
+    </p>
 
-        <div class="single-blog-post-ContentImage" data-aos="fade-left">
-          <img src="/images/pic1.jpg" alt="" />
+    <div class="single-blog-post-ContentImage" data-aos="fade-left">
+      <img :src="`/${post.image}`" alt="" />
+    </div>
+
+    <div class="about-text">
+      <p>
+        {{ post.description }}
+      </p>
+    </div>
+  </section>
+  <section class="recommended">
+    <p>Related</p>
+    <div class="recommended-cards">
+      <router-link v-for="relatedpost in related_post" :to="{name : 'SingleBlog', params: {slug: relatedpost.slug}}">
+        <div class="recommended-card">
+          <img :src="`/${relatedpost.image}`" alt="" loading="lazy" />
+          <h4 class="mt-2">
+            {{ relatedpost.title }}
+          </h4>
         </div>
+      </router-link> 
 
-        <div class="about-text">
-          <p>
-            Vaccination is the most
-            effective way to protect against infectious diseases. Vaccines
-            strengthen your immune system by training it to recognise and
-            fight against specific viruses. When you get vaccinated, you are
-            protecting yourself and helping to protect the whole community.
-            <br><br>
-            A COVID-19 vaccine might:
-          <ul>
-            <li> Prevent you from getting COVID-19 or from
-              becoming seriously ill or dying due to COVID-19 </li>
-            <li>Prevent you from
-              spreading the COVID-19 virus to others </li>
-            <li> Add to the number of people
-              in the community who are protected from getting COVID-19 — making
-              it harder for the disease to spread and contributing to herd
-              immunity </li>
-            <li> Prevent the COVID-19 virus from spreading and
-              replicating, which allows it to mutate and possibly become more
-              resistant to vaccines</li>
-          </ul>
-          </p>
-        </div>
-      </section>
-      <section class="recommended">
-        <p>Related</p>
-        <div class="recommended-cards">
-          <a href="">
-            <div class="recommended-card">
-              <img src="/images/pic5.jpg" alt="" loading="lazy" />
-              <h4>
-                12 Health Benefits Of Pomegranate Fruit
-              </h4>
-            </div>
-          </a>
-          <a href="">
-            <div class="recommended-card">
-              <img src="/images/pushups.jpg" alt="" loading="lazy" />
-              <h4>
-                The Truth About Pushups
-              </h4>
-            </div>
-          </a>
-          <a href="">
-            <div class="recommended-card">
-              <img src="/images/smoothies.jpg" alt="" loading="lazy" />
-              <h4>
-                Healthy Smoothies
-              </h4>
-            </div>
-          </a>
-
-        </div>
-      </section>
+    </div>
+  </section>
 </template>
 
 <script>
 export default {
-  props:'[slug]',
-  data(){
-    return{
+  // props:'[slug]',
+  emits: ['updateSidebar'],
+  data() {
+    return {
+      postId: '',
       post: {},
+      related_post: [],
     }
   },
-  mounted(){
-    console.log('sdsdsd')
+  mounted() {
+
+    this.postId = this.$route.params.slug;
+    //---single blog data--
+    axios.get('/api/front/blog/' + this.postId).then((res) => {
+      this.post = res.data.data;
+      // console.log(res.data.data)
+    }).catch((error) => {
+      console.log(error)
+    })
+
+    //---related blog---
+    axios.get('/api/front/related_blog/' + this.postId).then((res) => {
+      console.log(res.data.data);
+      this.related_post = res.data.data;
+    })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 }
 </script>

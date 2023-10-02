@@ -38,7 +38,7 @@
     <!-- main -->
     <main class="container">
       <!----render components depending on the page visited-->
-      <router-view @update-Sidebar="updateSidebar"></router-view>
+      <router-view @update-Sidebar="updateSidebar" :key="$route.path"></router-view>
     </main>
 
     <!-- Main footer -->
@@ -80,9 +80,11 @@ export default
     //---login and logout then update sidebar item show hide
     mounted(){
       if(localStorage.getItem('authenticated')){
+        // console.log(true)
         this.logedIn = true;
       }else{
         this.logedIn = false;
+        // console.log(false)
       }
     }
   }
