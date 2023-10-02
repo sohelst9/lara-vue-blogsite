@@ -17,7 +17,7 @@
       </p>
     </div>
   </section>
-  <section class="recommended">
+  <section class="recommended" v-if="related_post.length > 0">
     <p>Related</p>
     <div class="recommended-cards">
       <router-link v-for="relatedpost in related_post" :to="{name : 'SingleBlog', params: {slug: relatedpost.slug}}">

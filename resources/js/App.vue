@@ -86,6 +86,18 @@ export default
         this.logedIn = false;
         // console.log(false)
       }
+       //----user login and get this user data and show dashboard---
+       axios.get('/api/user')
+        .then((res) => {
+        })
+        .catch((error) => {
+            if(error.response.status == 401){
+                //----login session timeout end and authenticated removed----
+                this.$emit('updateSidebar')
+                localStorage.removeItem('authenticated')
+                console.log(error.response.status) 
+            }
+        })
     }
   }
 </script>

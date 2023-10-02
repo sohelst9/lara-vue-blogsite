@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\blogResource;
 use App\Models\BlogPost;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -10,6 +12,17 @@ use Illuminate\Support\Str;
 
 class BlogPostController extends Controller
 {
+    //----show
+    public function show()
+    {
+        $user = User::findOrFail(auth()->user()->id);
+        if($user->admin_check == 1){
+            return blogResource::collection(BlogPost::latest()->get());
+        }else{
+            return blogResource::collection(BlogPost::where('user_id', $user->id)->
+            latest()->take(20)->get());
+        }
+    }
     //---store
     public function store(Request $request)
     {

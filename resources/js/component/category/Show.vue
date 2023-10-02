@@ -68,7 +68,7 @@ export default {
                     this.success = res.data.message;
                     setInterval(() => {
                         this.success = '';
-                    }, 3000),
+                    }, 3000)
                         this.fetchCategory();
                     // console.log(res.data.message)
                 })

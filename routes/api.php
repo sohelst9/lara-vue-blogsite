@@ -35,9 +35,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     route::delete('/category/delete/{id}', [CategoryController::class, 'delete']);
     //-blog post ---
     route::post('/post/create', [BlogPostController::class, 'store']);
+    route::get('/post/show', [BlogPostController::class, 'show']);
     route::get('/post/edit/{id}', [BlogPostController::class, 'edit']);
     route::put('/post/update/{id}', [BlogPostController::class, 'update']);
-    route::delete('/post/delete', [BlogPostController::class, 'delete']);
+    route::delete('/post/delete/{id}', [BlogPostController::class, 'delete']);
     //backend route end---
 });
 

@@ -25,18 +25,17 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(post, index) in posts" :key="post.id">
-                                    <td>{{ index+1 }}</td>
+                                    <td>{{ index + 1 }}</td>
                                     <td>{{ post.title }}</td>
                                     <td>
                                         <img class="table_blog_image" :src="post.image" alt="">
                                     </td>
                                     <td>{{ post.category }}</td>
                                     <td>
-                                        <a
-                                            class="text-primary me-3">
+                                        <a class="text-primary me-3">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="#" class="text-danger">
+                                        <a href="#" @click="DeleteBlog(post.id)" class="text-danger">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>
@@ -53,19 +52,40 @@
 
 <script>
 export default {
-    data(){
-        return{
-            success:'',
+    data() {
+        return {
+            success: '',
             posts: [],
         }
-    }, 
-    mounted(){
-        axios.get('/api/front/blog').then((res) => {
-            this.posts = res.data.data;
-            console.log(res.data.data)
-        }).catch((error) =>{
-            console.log(error)
-        })
+    },
+    mounted() {
+        this.showBlogs();
+    },
+    methods: {
+        showBlogs() {
+            axios.get('/api/post/show').then((res) => {
+                this.posts = res.data.data;
+                console.log(res.data)
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+
+        DeleteBlog(post_id) {
+            if (confirm("Are You Sure, You want to delete this Data!")) {
+                axios.delete('/api/post/delete/' + post_id).then((res) => {
+                    this.success = "Blog Post Deleted Successfully";
+                    setInterval(() => {
+                        this.success = '';
+                    }, 3000)
+                    
+                    this.showBlogs();
+                    console.log(res.data)
+                }).catch((error) => {
+                    console.log(error)
+                })
+            }
+        }
     }
 }
 </script>
