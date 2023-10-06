@@ -32,9 +32,10 @@
                                     </td>
                                     <td>{{ post.category }}</td>
                                     <td>
-                                        <a class="text-primary me-3">
+                                        <router-link :to="{ name: 'PostEdit', params: { slug: post.slug } }"
+                                            class="text-primary me-3">
                                             <i class="fas fa-edit"></i>
-                                        </a>
+                                        </router-link>
                                         <a href="#" @click="DeleteBlog(post.id)" class="text-danger">
                                             <i class="fas fa-trash"></i>
                                         </a>
@@ -60,6 +61,11 @@ export default {
     },
     mounted() {
         this.showBlogs();
+        //show blog update success message----
+        this.success = this.$route.query.success;
+        setInterval(() => {
+            this.success = '';
+        }, 3000)
     },
     methods: {
         showBlogs() {
@@ -78,7 +84,7 @@ export default {
                     setInterval(() => {
                         this.success = '';
                     }, 3000)
-                    
+
                     this.showBlogs();
                     console.log(res.data)
                 }).catch((error) => {

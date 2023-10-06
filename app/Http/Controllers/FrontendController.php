@@ -11,7 +11,6 @@ class FrontendController extends Controller
 {
     //--index
     public function index(){
-        // return 'dsdsd';
         return blogResource::collection(BlogPost::latest()->take(20)->get());
     }
 
@@ -38,6 +37,6 @@ class FrontendController extends Controller
     //--all_blogs
     public function all_blogs()
     {
-        return blogResource::collection(BlogPost::get());
+        return blogResource::collection(BlogPost::latest()->get());
     }
 }

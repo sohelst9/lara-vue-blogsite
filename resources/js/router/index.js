@@ -12,6 +12,7 @@ import CategoryCreate from "../component/category/Create.vue"
 import CategoryEdit from "../component/category/Edit.vue"
 import PostCreate from "../component/blog/create.vue"
 import PostView from "../component/blog/View.vue"
+import PostEdit from "../component/blog/Edit.vue"
 
 //---create router
 const routes = [
@@ -95,6 +96,13 @@ const routes = [
         name: "PostView", 
         component: PostView,
         meta: {requiresAuth:true}
+    },
+    {
+        path : "/post/edit/:slug",
+        name: "PostEdit",
+        component : PostEdit,
+        meta:{requiresAuth:true},
+        props:true
     }
 
 ];

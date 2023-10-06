@@ -16,11 +16,10 @@ class BlogPostController extends Controller
     public function show()
     {
         $user = User::findOrFail(auth()->user()->id);
-        if($user->admin_check == 1){
+        if ($user->admin_check == 1) {
             return blogResource::collection(BlogPost::latest()->get());
-        }else{
-            return blogResource::collection(BlogPost::where('user_id', $user->id)->
-            latest()->take(20)->get());
+        } else {
+            return blogResource::collection(BlogPost::where('user_id', $user->id)->latest()->take(20)->get());
         }
     }
     //---store
@@ -78,9 +77,9 @@ class BlogPostController extends Controller
     }
 
     //---edit
-    public function edit($id)
+    public function edit($slug)
     {
-        $blog = BlogPost::findOrFail($id);
+        $blog = BlogPost::where('slug', $slug)->first();
         if ($blog) {
             return response()->json($blog);
         } else {
@@ -89,7 +88,7 @@ class BlogPostController extends Controller
     }
 
     //--update
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
@@ -101,8 +100,41 @@ class BlogPostController extends Controller
                 'status' => 422,
                 'errors' => $validator->messages()
             ], 422);
-        }else{
-            return "dddddd";
+        } else {
+            $blog = BlogPost::where('slug', $slug)->first();
+            if ($blog) {
+                $blog->update([
+                    'title' => $request->title,
+                    'slug' =>  Str::slug($request->title, '-'),
+                    'meta_title' => $request->meta_title,
+                    'meta_description' => $request->meta_description,
+                    'meta_keyword' => $request->meta_keyword,
+                    'category_id' => $request->category_id,
+                    'description' => $request->description,
+                ]);
+
+                if ($request->file('file')) {
+                    if($blog->image){
+                        File::delete(public_path($blog->image));
+                    }
+                    $file_name = 'update'.'-'.uniqid().'.'. $request->file('file')->getClientOriginalExtension();
+                    $path_name = 'uploads/Blog/'.$file_name;
+                    $request->file('file')->move(public_path('uploads/Blog'), $file_name);
+                    $blog->update([
+                        'image' => $path_name
+                    ]);
+
+                }
+                return response()->json([
+                    'status' => 200,
+                    'message' => "Blog Post Updated Successfully!"
+                ], 200);
+            }else{
+                return response()->json([
+                    'status' => 404,
+                    'message' => "Blog Post Not Found!"
+                ], 404);
+            }
         }
     }
 
