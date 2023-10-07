@@ -232,7 +232,7 @@ footer small {
 
 .categories ul li {
   list-style: none;
-  background-color: #494949;
+  /* background-color: #494949; */
   margin: 20px 5px;
   
   border-radius: 15px;
@@ -245,7 +245,7 @@ footer small {
 
 .categories a {
   color: white;
-  padding: 10px 20px;
+  /* padding: 10px 20px; */
   display: inline-block;
 }
 

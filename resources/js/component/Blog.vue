@@ -12,22 +12,23 @@
   </div>
   <div class="categories">
     <ul>
-      <li><a href="">Health</a></li>
-      <li><a href="">Entertainment</a></li>
-      <li><a href="">Sports</a></li>
-      <li><a href="">Nature</a></li>
+      <li><a href="#" @click="allBlog">All</a></li>
+      <li v-for="category in categories" :key="category.id"><a href="#" @click="filterCategoryPost(category.name)">{{
+        category.name }}</a></li>
     </ul>
   </div>
   <section class="cards-blog latest-blog">
     <div class="card-blog-content" v-for="blog in blogs" :key="blog.id">
-      <router-link :to="{name: 'SingleBlog', params: {slug: blog.slug}}"><img :src="blog.image" alt="" /></router-link>
-      
+      <router-link :to="{ name: 'SingleBlog', params: { slug: blog.slug } }"><img :src="blog.image"
+          alt="" /></router-link>
+
       <p>
         {{ blog.created_at }}
         <span>Written By {{ blog.user }}</span>
       </p>
+      <span>Category : {{ blog.category }}</span>
       <h4>
-        <router-link :to="{name: 'SingleBlog', params: {slug: blog.slug}}">{{ blog.title }}</router-link>
+        <router-link :to="{ name: 'SingleBlog', params: { slug: blog.slug } }">{{ blog.title }}</router-link>
       </h4>
     </div>
 
@@ -47,18 +48,37 @@
 <script>
 export default {
   emits: ['updateSidebar'],
-  data(){
+  data() {
     return {
-      blogs:[],
+      blogs: [],
+      categories: []
     }
   },
-  mounted(){
-    axios.get('/api/front/all-blogs').then((res) =>{
-      // console.log(res.data.data);
-      this.blogs = res.data.data;
-    }).catch((error) => {
-      console.log(error)
-    })
+  methods: {
+    filterCategoryPost(name) {
+      axios.get('/api/front/all-blogs', {
+        params: { category: name },
+      }).then((res) => {
+        console.log(res.data.blogs)
+        this.blogs = res.data.blogs;
+      }).catch((error) => {
+        console.log('Post Not Found')
+      })
+    },
+    //---all-blog
+    allBlog() {
+      axios.get('/api/front/all-blogs').then((res) => {
+        // console.log(res.data.categories);
+        this.categories = res.data.categories;
+        this.blogs = res.data.blogs;
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+  },
+  mounted() {
+    //fetch all blogs---
+    this.allBlog();
   }
 }
 </script>

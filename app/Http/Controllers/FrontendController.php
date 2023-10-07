@@ -35,8 +35,19 @@ class FrontendController extends Controller
        
     }
     //--all_blogs
-    public function all_blogs()
+    public function all_blogs(Request $request)
     {
-        return blogResource::collection(BlogPost::latest()->get());
+        if($request->category){
+            $blogs = blogResource::collection(Category::where('name', $request->category)->firstOrFail()->blog()->latest()->get());
+            return response()->json([
+                'blogs' =>$blogs,
+            ]);
+        }
+        $blogs =  blogResource::collection(BlogPost::latest()->get());
+        $categories = Category::take(4)->get();
+        return response()->json([
+            'blogs' =>$blogs,
+            'categories' => $categories
+        ]);
     }
 }
