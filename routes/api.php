@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -43,6 +44,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 });
 
 Route::post('register', [RegisteredUserController::class, 'store']);
+Route::get('login', [UserController::class, 'login'])->name('login');
 Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
 //----frontend route ---
@@ -51,4 +53,5 @@ Route::get('front/blog/{slug}', [FrontendController::class, 'single_blog']);
 Route::get('/front/related_blog/{slug}', [FrontendController::class, 'related_blog']);
 //--blog
 Route::get('/front/all-blogs', [FrontendController::class, 'all_blogs']);
+Route::get('/front/categories', [FrontendController::class, 'all_categories']);
 

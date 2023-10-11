@@ -13,14 +13,12 @@ class FrontendController extends Controller
     public function index(){
         return blogResource::collection(BlogPost::latest()->take(20)->get());
     }
-
     //--single_blog
     public function single_blog($slug)
     {
         $post = BlogPost::where('slug', $slug)->first();
         return new blogResource($post);
     }
-
     //--related_blog
     public function related_blog($slug)
     {
@@ -32,22 +30,25 @@ class FrontendController extends Controller
         }else{
             return "Category Id Not found";
         }
-       
     }
     //--all_blogs
     public function all_blogs(Request $request)
     {
+        //category_based blog post
         if($request->category){
-            $blogs = blogResource::collection(Category::where('name', $request->category)->firstOrFail()->blog()->latest()->get());
-            return response()->json([
-                'blogs' =>$blogs,
-            ]);
+          return  $blogs = blogResource::collection(Category::where('name', $request->category)->firstOrFail()->blog()->latest()->paginate(2)->withQueryString());
         }
-        $blogs =  blogResource::collection(BlogPost::latest()->get());
-        $categories = Category::take(4)->get();
-        return response()->json([
-            'blogs' =>$blogs,
-            'categories' => $categories
-        ]);
+        //search blog post
+        elseif($request->search){
+           return $blogs = blogResource::collection(BlogPost::where('title', 'LIKE', '%'.$request->search.'%')->paginate(2)->withQueryString());
+        }
+        //--all blog post
+       return $blogs =  blogResource::collection(BlogPost::latest()->paginate(2));
+    }
+
+    //--all_categories
+    public function all_categories()
+    {
+        return $categories = Category::take(4)->get();
     }
 }

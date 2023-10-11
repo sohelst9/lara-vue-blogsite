@@ -312,6 +312,10 @@ footer small {
   color: black;
 }
 
+.disable_paginate_btn{
+  pointer-events: none;
+}
+
 /* Single Blog */
 .single-blog-post h1 {
   text-align: center;

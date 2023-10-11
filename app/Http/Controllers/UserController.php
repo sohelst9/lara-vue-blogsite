@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    //----all user---
+    //login
+    public function login()
+    {
+        return response()->json([
+            'status' => 401,
+            'error' => 'Unauthorized'
+        ], 401);
+    }
     
 }
